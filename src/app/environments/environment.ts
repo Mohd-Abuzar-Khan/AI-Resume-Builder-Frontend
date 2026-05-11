@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:9090/api/v1'
+  apiBaseUrl: 'https://resumade-ai-production.up.railway.app/api/v1'
 };
