@@ -1,4 +1,5 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:9090/api/v1'
+  apiUrl: 'https://resumade.duckdns.org',
+  apiBaseUrl: 'https://resumade.duckdns.org/api/v1'
 };
