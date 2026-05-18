@@ -71,10 +71,10 @@ import { LucideAngularModule, AlertCircle, AlertTriangle, CheckCircle, Info, X }
               (click)="handlePrimaryClick(state)" 
               [disabled]="isProcessing()"
               [ngClass]="{
-                'bg-white text-slate-900 hover:bg-white/90': state.type !== 'error',
+                'bg-white text-slate-900 hover:bg-white/90': state.type === 'alert' || state.type === 'info',
                 'bg-rose-600 text-white hover:bg-rose-700': state.type === 'error',
                 'bg-emerald-600 text-white hover:bg-emerald-700': state.type === 'success',
-                'bg-amber-600 text-white hover:bg-amber-700': state.type === 'confirm'
+                'bg-slate-800 text-white hover:bg-slate-700 border border-white/10': state.type === 'confirm'
               }"
               class="flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               {{ isProcessing() ? 'Processing...' : (state.primaryButtonLabel || 'OK') }}

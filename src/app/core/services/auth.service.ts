@@ -12,11 +12,19 @@ export interface RegisterRequest {
   password: string;
   confirmPassword: string;
   role?: string;
+  profilePicture?: string;
 }
 
 export interface LoginRequest {
   email: string;
   password: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
 }
 
 export interface AuthResponse {
@@ -26,7 +34,7 @@ export interface AuthResponse {
   email: string;
   role: string;
   plan: string;
-  avatar?: string;
+  profilePicture?: string;
 }
 
 export interface UserInfo {
@@ -36,7 +44,7 @@ export interface UserInfo {
   role: string;
   plan: string;
   initials: string;
-  avatar?: string;
+  profilePicture?: string;
 }
 
 @Injectable({
@@ -164,7 +172,7 @@ export class AuthService {
       role: response.role,
       plan: response.plan,
       initials: this.getInitials(response.fullName),
-      avatar: response.avatar,
+      profilePicture: response.profilePicture,
     });
     this.startProfileSyncIfNeeded();
     console.log('[Auth] User session updated:', this._user());
@@ -196,6 +204,14 @@ export class AuthService {
     );
   }
 
+  forgotPassword(email: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/forgot-password?email=${email}`, {});
+  }
+
+  resetPassword(request: ResetPasswordRequest): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/reset-password`, request);
+  }
+
   private loadUserFromToken(): void {
     const token = this.getToken();
     if (!token || token === 'undefined' || token === 'null') {
@@ -218,7 +234,7 @@ export class AuthService {
         role: payload['role'] as string,
         plan: payload['plan'] as string,
         initials: this.getInitials(payload['fullName'] as string),
-        avatar: payload['avatar'] as string,
+        profilePicture: payload['profilePicture'] as string,
       });
       this.startProfileSyncIfNeeded();
     } catch {

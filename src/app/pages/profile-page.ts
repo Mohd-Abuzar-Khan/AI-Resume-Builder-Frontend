@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 import { PopupService } from '../core/services/popup.service';
+import { cn } from '../lib/utils';
 
 @Component({
   selector: 'app-profile',
@@ -20,6 +21,30 @@ import { PopupService } from '../core/services/popup.service';
         <!-- Personal Info Section -->
         <div>
           <h2 class="text-[15px] font-medium mb-6 text-white/90">Personal information</h2>
+          
+          <!-- Profile Picture Selection -->
+          <div class="mb-8">
+            <label class="text-[12px] block mb-3 text-white/40 uppercase tracking-widest">Profile Picture</label>
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-4">
+              @for (pfp of profilePictures; track pfp) {
+                <button (click)="selectProfilePicture(pfp)" 
+                        [class]="cn('relative aspect-square rounded-xl overflow-hidden border-2 transition-all hover:scale-105 active:scale-95 cursor-pointer',
+                                profileData.profilePicture === pfp ? 'border-indigo-500 bg-indigo-500/10' : 'border-white/5 bg-white/5 hover:border-white/20')">
+                  <img [src]="'/' + pfp" class="w-full h-full object-cover p-1" />
+                  @if (profileData.profilePicture === pfp) {
+                    <div class="absolute inset-0 flex items-center justify-center bg-indigo-500/20">
+                      <div class="bg-indigo-500 rounded-full p-1">
+                        <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    </div>
+                  }
+                </button>
+              }
+            </div>
+          </div>
+
           <div class="space-y-5">
             <!-- Full Name -->
             <div>
@@ -166,12 +191,23 @@ export class ProfilePageComponent implements OnInit {
 
   readonly EyeIcon = Eye;
   readonly EyeOffIcon = EyeOff;
+  cn = cn;
 
   profileData = {
     fullName: '',
     email: '',
-    phone: ''
+    phone: '',
+    profilePicture: ''
   };
+
+  readonly profilePictures = [
+    '5e53523cf3aa4b6f462b2ec0_peep-17.svg',
+    '5e5354a47488c290a747829e_peep-31.svg',
+    '5e53573df5fa1a2163f8ed70_peep-48.svg',
+    '5e535935f5fa1a5daffaf786_peep-65.svg',
+    '5e535c42c67e79a7a6962d19_peep-91.svg',
+    '5e535d14550b766b43f85cf9_peep-98.svg'
+  ];
 
   passwordData = {
     current: '',
@@ -184,8 +220,13 @@ export class ProfilePageComponent implements OnInit {
     if (user) {
       this.profileData.fullName = user.fullName;
       this.profileData.email = user.email;
+      this.profileData.profilePicture = user.profilePicture || '';
     }
     this.loadAiHistory();
+  }
+
+  selectProfilePicture(pfp: string) {
+    this.profileData.profilePicture = pfp;
   }
 
   loadAiHistory() {

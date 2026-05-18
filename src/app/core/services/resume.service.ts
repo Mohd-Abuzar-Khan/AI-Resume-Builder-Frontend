@@ -126,7 +126,7 @@ export class ResumeService {
 
   publishResume(id: number, isPublic: boolean): Observable<BackendResume> {
     const ownerName = this.auth.user()?.fullName || '';
-    const ownerAvatar = this.auth.user()?.avatar || '';
+    const ownerAvatar = this.auth.user()?.profilePicture || '';
     return this.http.put<BackendResume>(`${this.apiResumes}/${id}/publish?isPublic=${isPublic}&ownerName=${ownerName}&ownerAvatar=${ownerAvatar}`, {});
   }
 

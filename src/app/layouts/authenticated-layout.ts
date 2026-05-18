@@ -35,9 +35,13 @@ import { AuthService } from '../core/services/auth.service';
            <div class="flex items-center gap-4">
               <app-notification-bell></app-notification-bell>
               <!-- Avatar -->
-              <div class="h-8 w-8 rounded-full flex items-center justify-center text-[11px] font-medium cursor-pointer"
+              <div class="h-8 w-8 rounded-full overflow-hidden flex items-center justify-center text-[11px] font-medium cursor-pointer"
                    style="background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.9); border:0.5px solid rgba(255,255,255,0.15)">
-                {{ auth.user()?.initials }}
+                @if (auth.user()?.profilePicture) {
+                  <img [src]="'/' + auth.user()?.profilePicture" class="h-full w-full object-cover" />
+                } @else {
+                  {{ auth.user()?.initials }}
+                }
               </div>
            </div>
         </header>

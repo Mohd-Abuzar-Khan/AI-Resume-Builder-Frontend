@@ -52,9 +52,13 @@ export class AdminService {
     return this.http.post<void>(`${this.notifyUrl}/broadcast?title=${title}&message=${message}&recipientType=${recipientType}`, {});
   }
 
+  promoteToAdmin(userId: number): Observable<void> {
+    return this.http.put<void>(`${this.authAdminUrl}/users/${userId}/promote`, {});
+  }
+
   // Payments / Billing
-  getPaymentsSummary(): Observable<{ totalRevenue: number; monthly: number[]; labels: string[] }> {
-    return this.http.get<{ totalRevenue: number; monthly: number[]; labels: string[] }>(`${environment.apiBaseUrl}/billing/summary`);
+  getAllPayments(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.authAdminUrl}/payments`);
   }
 
   getPricing(): Observable<{ monthly: number; annual: number }> {

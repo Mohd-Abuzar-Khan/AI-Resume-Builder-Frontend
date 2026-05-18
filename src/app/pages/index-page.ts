@@ -97,7 +97,7 @@ import { TopNavComponent } from '../components/top-nav';
                   <span class="text-[10px] text-foreground/40">resume.pdf</span>
                 </div>
                 <div class="space-y-1 mb-6">
-                  <div class="font-display text-xl text-foreground">Ananya Sharma</div>
+                  <div class="font-display text-xl text-foreground">Ananya Shukla</div>
                   <div class="text-xs text-foreground/55">Senior Product Designer · Bengaluru</div>
                 </div>
                 <div class="space-y-2 mb-6">
@@ -121,7 +121,7 @@ import { TopNavComponent } from '../components/top-nav';
                   </div>
                 </div>
               </div>
-              <div class="absolute -inset-8 -z-10 blur-3xl opacity-60" style="background: radial-gradient(circle, oklch(0.60 0.24 25 / 0.4), transparent 70%);"></div>
+
             </div>
           </div>
         </section>
@@ -304,13 +304,13 @@ import { TopNavComponent } from '../components/top-nav';
             </div>
             <div class="grid md:grid-cols-3 gap-5">
               @for (t of tiers; track t.name) {
-                <div class="glass-card p-8 md:p-10 flex flex-col relative overflow-hidden"
+                <div class="glass-card p-8 md:p-10 flex flex-col relative overflow-visible"
                      [class.md:-translate-y-3]="t.featured"
                      [style.borderColor]="t.featured ? 'oklch(0.85 0.10 70 / 0.55)' : 'rgba(255, 240, 230, 0.14)'"
                      [style.boxShadow]="t.featured ? '0 20px 60px -20px oklch(0.55 0.22 25 / 0.5)' : ''">
                   
                   @if (t.featured) {
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-medium px-3 py-1 rounded-full" style="background: oklch(0.85 0.10 70); color: oklch(0.20 0.08 25);">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[10px] font-medium px-3 py-1 rounded-full whitespace-nowrap z-10" style="background: oklch(0.85 0.10 70); color: oklch(0.20 0.08 25);">
                       ✦ Best Value
                     </div>
                   }

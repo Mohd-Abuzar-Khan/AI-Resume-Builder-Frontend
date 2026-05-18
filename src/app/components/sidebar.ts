@@ -13,7 +13,8 @@ import {
   Users, 
   Compass, 
   CreditCard,
-  FileText
+  FileText,
+  Wallet
 } from 'lucide-angular';
 
 
@@ -56,7 +57,19 @@ import {
                          (collapsed() ? 'justify-center px-0' : 'px-4')"
                 style="color:rgba(255,255,255,0.45)"
               >
-                <lucide-icon [name]="getIcon(item.label)" class="h-4 w-4 shrink-0"></lucide-icon>
+                @if (item.label === 'Profile') {
+                  <div class="h-4 w-4 shrink-0 rounded-full overflow-hidden bg-white/10">
+                    @if (auth.user()?.profilePicture) {
+                      <img [src]="'/' + auth.user()?.profilePicture" class="h-full w-full object-cover" />
+                    } @else {
+                      <div class="grid h-full w-full place-items-center text-black bg-white font-mono text-[6px]">
+                        {{ auth.user()?.initials }}
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <lucide-icon [name]="getIcon(item.label)" class="h-4 w-4 shrink-0"></lucide-icon>
+                }
                 @if (!collapsed()) {
                   <span>{{ item.label | uppercase }}</span>
                 }
@@ -83,7 +96,19 @@ import {
                          (collapsed() ? 'justify-center px-0' : 'px-4')"
                 style="color:rgba(255,255,255,0.45)"
               >
-                <lucide-icon [name]="getIcon(item.label)" class="h-4 w-4 shrink-0"></lucide-icon>
+                @if (item.label === 'Profile') {
+                  <div class="h-4 w-4 shrink-0 rounded-full overflow-hidden bg-white/10">
+                    @if (auth.user()?.profilePicture) {
+                      <img [src]="'/' + auth.user()?.profilePicture" class="h-full w-full object-cover" />
+                    } @else {
+                      <div class="grid h-full w-full place-items-center text-black bg-white font-mono text-[6px]">
+                        {{ auth.user()?.initials }}
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <lucide-icon [name]="getIcon(item.label)" class="h-4 w-4 shrink-0"></lucide-icon>
+                }
                 @if (!collapsed()) {
                   <span>{{ item.label | uppercase }}</span>
                 }
@@ -110,7 +135,19 @@ import {
                          (collapsed() ? 'justify-center px-0' : 'px-4')"
                 style="color:rgba(255,255,255,0.45)"
               >
-                <lucide-icon [name]="getIcon(item.label)" class="h-4 w-4 shrink-0"></lucide-icon>
+                @if (item.label === 'Profile') {
+                  <div class="h-4 w-4 shrink-0 rounded-full overflow-hidden bg-white/10">
+                    @if (auth.user()?.profilePicture) {
+                      <img [src]="'/' + auth.user()?.profilePicture" class="h-full w-full object-cover" />
+                    } @else {
+                      <div class="grid h-full w-full place-items-center text-black bg-white font-mono text-[6px]">
+                        {{ auth.user()?.initials }}
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <lucide-icon [name]="getIcon(item.label)" class="h-4 w-4 shrink-0"></lucide-icon>
+                }
                 @if (!collapsed()) {
                   <span>{{ item.label | uppercase }}</span>
                 }
@@ -125,8 +162,14 @@ import {
         @if (!collapsed()) {
           <div class="p-4 border-t border-white/5">
             <div class="flex items-center gap-3 px-2 py-2">
-              <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-black font-mono text-[11px]">
-                {{ auth.user()?.initials }}
+              <div class="h-10 w-10 shrink-0 rounded-full overflow-hidden bg-white/10">
+                @if (auth.user()?.profilePicture) {
+                  <img [src]="'/' + auth.user()?.profilePicture" class="h-full w-full object-cover" />
+                } @else {
+                  <div class="grid h-full w-full place-items-center text-black bg-white font-mono text-[11px]">
+                    {{ auth.user()?.initials }}
+                  </div>
+                }
               </div>
               <div class="min-w-0">
                 <div class="text-[13px] font-medium truncate text-white/90">{{ auth.user()?.fullName }}</div>
@@ -142,8 +185,14 @@ import {
           </div>
         } @else {
           <div class="py-4 border-t border-white/5 flex justify-center w-full">
-            <div class="grid h-9 w-9 place-items-center rounded-full bg-white text-black font-mono text-[10px]">
-              {{ auth.user()?.initials }}
+            <div class="h-9 w-9 rounded-full overflow-hidden bg-white/10">
+              @if (auth.user()?.profilePicture) {
+                <img [src]="'/' + auth.user()?.profilePicture" class="h-full w-full object-cover" />
+              } @else {
+                <div class="grid h-full w-full place-items-center text-black bg-white font-mono text-[10px]">
+                  {{ auth.user()?.initials }}
+                </div>
+              }
             </div>
           </div>
         }
@@ -186,6 +235,7 @@ export class SidebarComponent {
     { label: 'Admin Dashboard', path: '/admin' },
     { label: 'Users', path: '/admin/users' },
     { label: 'Templates', path: '/admin/templates' },
+    { label: 'Payments', path: '/admin/payments' },
     { label: 'Broadcast', path: '/admin/broadcast' },
     { label: 'AI Test Lab', path: '/admin/ai-test' },
   ];
@@ -218,6 +268,7 @@ export class SidebarComponent {
     'Templates': LayoutDashboard,
     'Broadcast': Compass,
     'AI Test Lab': FileSearch,
+    'Payments': Wallet,
   };
 
   getIcon(label: string) {

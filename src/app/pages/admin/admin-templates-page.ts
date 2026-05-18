@@ -129,6 +129,14 @@ const DEFAULT_CSS_STYLES = '.resume-root { font-family: sans-serif; }';
                     <input class="glass-input w-full" formControlName="name" placeholder="E.g. Modern Executive" />
                   </div>
                   <div class="space-y-2">
+                    <label class="text-[12px] font-medium text-white/40 uppercase tracking-widest">Category</label>
+                    <select class="glass-input w-full" formControlName="category">
+                      @for (cat of ['PROFESSIONAL', 'MODERN', 'CLASSIC', 'CREATIVE']; track cat) {
+                        <option [value]="cat">{{ cat }}</option>
+                      }
+                    </select>
+                  </div>
+                  <div class="space-y-2">
                     <label class="text-[12px] font-medium text-white/40 uppercase tracking-widest">Options</label>
                     <div class="flex flex-wrap gap-6 pt-2">
                       <label class="flex items-center gap-3 text-[13px] text-white/70 cursor-pointer hover:text-white transition-colors">
@@ -353,6 +361,7 @@ export class AdminTemplatesComponent implements OnInit {
 
   templateForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
+    category: ['PROFESSIONAL', Validators.required],
     description: [''],
     isActive: [true],
     isPremium: [false],
@@ -446,6 +455,7 @@ export class AdminTemplatesComponent implements OnInit {
     this.applyConfig(parsed);
     this.templateForm.patchValue({
       name: template.name,
+      category: template.category || 'PROFESSIONAL',
       description: template.description || '',
       isActive: template.isActive,
       isPremium: template.isPremium || false,
@@ -465,7 +475,7 @@ export class AdminTemplatesComponent implements OnInit {
       layoutConfig,
       htmlLayout: DEFAULT_HTML_LAYOUT,
       cssStyles: DEFAULT_CSS_STYLES,
-      category: 'PROFESSIONAL',
+      category: this.templateForm.controls.category.value,
       isPremium: this.templateForm.controls.isPremium.value,
       thumbnailUrl: this.templateForm.controls.thumbnailUrl.value
     };
@@ -502,6 +512,7 @@ export class AdminTemplatesComponent implements OnInit {
     this.editingTemplateId.set(null);
     this.templateForm.reset({
       name: '',
+      category: 'PROFESSIONAL',
       description: '',
       isActive: true,
       isPremium: false,
@@ -524,6 +535,7 @@ export class AdminTemplatesComponent implements OnInit {
     this.applyConfig(parsed);
     this.templateForm.patchValue({
       name: template.name,
+      category: template.category || 'PROFESSIONAL',
       description: template.description || '',
       isActive: template.isActive,
       isPremium: template.isPremium || false,

@@ -1,12 +1,13 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../core/services/admin.service';
 import { PopupService } from '../../core/services/popup.service';
 
 @Component({
   selector: 'app-admin-users',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="space-y-8 animate-fade-up">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -15,7 +16,8 @@ import { PopupService } from '../../core/services/popup.service';
           <h1 class="text-[28px] font-medium tracking-tight text-white/90">User Management</h1>
         </div>
         <!-- Search -->
-        <input type="text" placeholder="Search users..."
+        <input type="text" placeholder="Search users by name or email..."
+               [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)"
                class="glass-input w-72 py-2.5 px-4" />
       </div>
 
@@ -27,13 +29,14 @@ import { PopupService } from '../../core/services/popup.service';
               <tr class="border-b border-white/10">
                 <th class="py-4 pr-6 font-medium text-white/40 uppercase tracking-widest text-[10px]">User</th>
                 <th class="py-4 pr-6 font-medium text-white/40 uppercase tracking-widest text-[10px]">Tier</th>
+                <th class="py-4 pr-6 font-medium text-white/40 uppercase tracking-widest text-[10px]">Role</th>
                 <th class="py-4 pr-6 font-medium text-white/40 uppercase tracking-widest text-[10px]">Status</th>
                 <th class="py-4 pr-6 font-medium text-white/40 uppercase tracking-widest text-[10px]">Joined</th>
                 <th class="py-4 font-medium text-right text-white/40 uppercase tracking-widest text-[10px]">Actions</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-white/5">
-              @for (user of users(); track user.userId) {
+              @for (user of filteredUsers(); track user.userId) {
                 <tr class="hover:bg-white/5 transition-colors group">
                   <td class="py-5 pr-6">
                     <div class="flex items-center gap-3">
@@ -55,6 +58,13 @@ import { PopupService } from '../../core/services/popup.service';
                     </span>
                   </td>
                   <td class="py-5 pr-6">
+                    <span class="glass-badge"
+                          [style.color]="user.role === 'ADMIN' ? '#A78BFA' : 'rgba(255,255,255,0.6)'"
+                          [style.border-color]="user.role === 'ADMIN' ? 'rgba(167,139,250,0.3)' : 'rgba(255,255,255,0.1)'">
+                      {{ user.role }}
+                    </span>
+                  </td>
+                  <td class="py-5 pr-6">
                     <div class="flex items-center gap-2">
                       <div class="h-1.5 w-1.5 rounded-full shadow-[0_0_8px_currentColor]"
                            [style.background]="user.isActive ? '#4FD1C5' : '#F87171'"
@@ -70,6 +80,9 @@ import { PopupService } from '../../core/services/popup.service';
                   </td>
                   <td class="py-5 text-right">
                     <div class="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      @if (user.role === 'USER') {
+                        <button (click)="promoteToAdmin(user)" class="text-[12px] font-medium cursor-pointer hover:text-indigo-400 text-indigo-400/60 transition-colors">Promote</button>
+                      }
                       @if (user.subscriptionPlan === 'FREE') {
                         <button (click)="upgradePlan(user)" class="text-[12px] font-medium cursor-pointer hover:text-amber-400 text-amber-400/60 transition-colors">Upgrade</button>
                       } @else {
@@ -96,6 +109,16 @@ export class AdminUsersComponent implements OnInit {
   private adminService = inject(AdminService);
   private popup = inject(PopupService);
   users = signal<any[]>([]);
+  searchQuery = signal('');
+
+  filteredUsers = computed(() => {
+    const q = this.searchQuery().toLowerCase();
+    if (!q) return this.users();
+    return this.users().filter(u => 
+      u.fullName?.toLowerCase().includes(q) || 
+      u.email?.toLowerCase().includes(q)
+    );
+  });
 
   ngOnInit() { this.loadUsers(); }
 
@@ -103,6 +126,22 @@ export class AdminUsersComponent implements OnInit {
 
   getInitials(name: string): string {
     return name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?';
+  }
+
+  promoteToAdmin(user: any) {
+    this.popup.confirm(
+      'Promote to Admin',
+      `Are you sure you want to promote ${user.fullName} to Admin? They will have full access to the admin dashboard.`,
+      () => {
+        this.adminService.promoteToAdmin(user.userId).subscribe({
+          next: () => {
+            this.loadUsers();
+            this.popup.success('Success', `${user.fullName} is now an Admin.`);
+          },
+          error: () => this.popup.error('Error', 'Failed to promote user.')
+        });
+      }
+    );
   }
 
   upgradePlan(user: any) {

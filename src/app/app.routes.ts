@@ -120,6 +120,10 @@ export const routes: Routes = [
         path: 'ai-test',
         loadComponent: () => import('./pages/admin/ai-test-page').then((m) => m.AiTestPageComponent),
       },
+      {
+        path: 'payments',
+        loadComponent: () => import('./pages/admin/payments').then((m) => m.AdminPaymentsComponent),
+      },
     ],
   },
 

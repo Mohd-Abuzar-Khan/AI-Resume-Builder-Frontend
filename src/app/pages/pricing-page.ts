@@ -61,10 +61,9 @@ import { CommonModule } from '@angular/common';
             }
           </div>
 
-          <!-- Annual -->
-          <div class="pricing-card glass-card rounded-2xl p-8 md:p-10 flex flex-col md:-translate-y-3 relative overflow-hidden opacity-0"
+          <div class="pricing-card glass-card rounded-2xl p-8 md:p-10 flex flex-col md:-translate-y-3 relative overflow-visible opacity-0"
                style="border-color: oklch(0.85 0.10 70 / 0.55); box-shadow: 0 20px 60px -20px oklch(0.55 0.22 25 / 0.5);">
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-medium px-3 py-1 rounded-full" style="background: oklch(0.85 0.10 70); color: oklch(0.20 0.08 25);">
+            <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-[10px] font-medium px-3 py-1 rounded-full whitespace-nowrap z-10" style="background: oklch(0.85 0.10 70); color: oklch(0.20 0.08 25);">
               ✦ Best Value
             </div>
             <p class="text-[0.65rem] uppercase tracking-[0.18em] font-medium mb-4 text-amber-500">Annual</p>

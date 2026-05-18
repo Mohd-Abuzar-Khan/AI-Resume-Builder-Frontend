@@ -37,10 +37,14 @@ import { CommonModule } from '@angular/common';
           <div class="relative">
             <button (click)="toggleDropdown()" class="outline-none cursor-pointer relative group">
               <div class="h-9 w-9 rounded-full flex items-center justify-center overflow-hidden transition-colors border border-white/10">
-                <div [class]="cn('text-xs font-medium h-full w-full flex items-center justify-center transition-all',
-                    auth.user()?.plan === 'PREMIUM' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/10 text-white/90')">
-                  {{ auth.user()?.initials }}
-                </div>
+                @if (auth.user()?.profilePicture) {
+                  <img [src]="'/' + auth.user()?.profilePicture" class="h-full w-full object-cover" />
+                } @else {
+                  <div [class]="cn('text-xs font-medium h-full w-full flex items-center justify-center transition-all',
+                      auth.user()?.plan === 'PREMIUM' ? 'bg-amber-500/20 text-amber-400' : 'bg-white/10 text-white/90')">
+                    {{ auth.user()?.initials }}
+                  </div>
+                }
               </div>
               @if (auth.user()?.plan === 'PREMIUM') {
                 <div class="absolute -top-1.5 -right-1.5 rounded-full p-0.5 shadow-lg bg-amber-600 border border-white/20">

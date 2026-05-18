@@ -144,6 +144,15 @@ export class RegisterComponent {
   readonly EyeIcon = Eye;
   readonly EyeOffIcon = EyeOff;
 
+  readonly profilePictures = [
+    '5e53523cf3aa4b6f462b2ec0_peep-17.svg',
+    '5e5354a47488c290a747829e_peep-31.svg',
+    '5e53573df5fa1a2163f8ed70_peep-48.svg',
+    '5e535935f5fa1a5daffaf786_peep-65.svg',
+    '5e535c42c67e79a7a6962d19_peep-91.svg',
+    '5e535d14550b766b43f85cf9_peep-98.svg'
+  ];
+
   form = this.fb.group({
     fullName: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
@@ -168,7 +177,8 @@ export class RegisterComponent {
       email: email!,
       password: password!,
       confirmPassword: this.form.get('confirmPassword')?.value!,
-      role: role
+      role: role,
+      profilePicture: this.profilePictures[Math.floor(Math.random() * this.profilePictures.length)]
     }).subscribe({
       next: () => {
         this.isLoading.set(false);
